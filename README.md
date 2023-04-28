@@ -24,8 +24,13 @@ WHAT IS THE DIFFRENCE BETWEEN THREAD AND PROCESS:
 		* Communication: Processes can communicate with each other using interprocess communication (IPC) mechanisms such as pipes, sockets, and shared memory. Threads communicate with each other through shared memory or message passing mechanisms.
 
 	In summary, threads are lighter weight than processes and are used to achieve parallelism within a process, while processes are used to achieve concurrency between independent tasks.
+<<<<<<< HEAD
 
 
 	WHAAT IS RACE CONDITION:
 
 		A race condition is a situation that can occur in computer software when two or more threads or processes access a shared resource, such as a memory location or a file, in an unexpected or unintended order.
+=======
+	
+	
+>>>>>>> 7472371a65c80ab077edbb6f3b3c1451badc65fc
