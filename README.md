@@ -1,6 +1,6 @@
 # Philosophers
 
-![Alt text]https://upload.wikimedia.org/wikipedia/commons/7/7b/An_illustration_of_the_dining_philosophers_problem.png
+![Alt text](https://upload.wikimedia.org/wikipedia/commons/7/7b/An_illustration_of_the_dining_philosophers_problem.png)
 
 * **WHAT IS A THREAD**:
 
