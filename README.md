@@ -1,12 +1,15 @@
 # Philosophers
 
+![Alt text]https://upload.wikimedia.org/wikipedia/commons/7/7b/An_illustration_of_the_dining_philosophers_problem.png
+
 * **WHAT IS A THREAD**:
 
-	In computer science, a thread is a basic unit of execution within a process. It is a lightweight sequence of instructions that can be scheduled to run independently of other threads, allowing for concurrent or parallel execution.
+	In computer science, a thread is a basic unit of execution within a process.
+	It is a lightweight sequence of instructions that can be scheduled to run independently of other threads, allowing for concurrent or parallel execution.
 
-	Each thread has its own program counter, stack, and set of registers, but shares the same memory space as the process and other threads. Threads can communicate and synchronize with each other through shared memory or message passing mechanisms.
+	Each thread has its own program counter, stack, and set of registers, but shares the same memory space as the process and other threads.
+	Threads can communicate and synchronize with each other through shared memory or message passing mechanisms.
 
-	Multithreading is a common technique used in modern software development to increase performance and responsiveness of applications, especially those that involve I/O operations or long-running tasks that can be split into smaller pieces.
 
 
 * **WHAT IS THE DIFFRENCE BETWEEN THREAD AND PROCESS**:
@@ -23,7 +26,6 @@
 
 		* Communication: Processes can communicate with each other using interprocess communication (IPC) mechanisms such as pipes, sockets, and shared memory. Threads communicate with each other through shared memory or message passing mechanisms.
 
-	In summary, threads are lighter weight than processes and are used to achieve parallelism within a process, while processes are used to achieve concurrency between independent tasks.
 
 
 
@@ -38,7 +40,18 @@
 | The process is called the heavyweight process. | A Thread is lightweight as each thread in a process shares code, data, and resources.	|
 | The process is isolated. | Threads share memory.	|
 
+ 
+In summary, threads are lighter weight than processes and are used to achieve parallelism within a process, while processes are used to achieve concurrency between independent tasks.
 
 * **WHAAT IS RACE CONDITION**:
 
 		A race condition is a situation that can occur in computer software when two or more threads or processes access a shared resource, such as a memory location or a file, in an unexpected or unintended order.
+
+
+
+
+
+
+
+	
+	Multithreading is a common technique used in modern software development to increase performance and responsiveness of applications, especially those that involve I/O operations or long-running tasks that can be split into smaller pieces.
