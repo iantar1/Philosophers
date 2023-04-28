@@ -1,6 +1,6 @@
 # Philosophers
 
-* WHAT IS A THREAD:
+* <u>WHAT IS A THREAD</u>:
 
 	In computer science, a thread is a basic unit of execution within a process. It is a lightweight sequence of instructions that can be scheduled to run independently of other threads, allowing for concurrent or parallel execution.
 
@@ -9,7 +9,7 @@
 	Multithreading is a common technique used in modern software development to increase performance and responsiveness of applications, especially those that involve I/O operations or long-running tasks that can be split into smaller pieces.
 
 
-* WHAT IS THE DIFFRENCE BETWEEN THREAD AND PROCESS:
+* <u>WHAT IS THE DIFFRENCE BETWEEN THREAD AND PROCESS</u>:
 
 	In computer science, both threads and processes are units of execution, but they differ in several ways. Here are some of the key differences:
 
@@ -26,6 +26,6 @@
 	In summary, threads are lighter weight than processes and are used to achieve parallelism within a process, while processes are used to achieve concurrency between independent tasks.
 
 
-* WHAAT IS RACE CONDITION:
+* <u>WHAAT IS RACE CONDITION</u>:
 
 		A race condition is a situation that can occur in computer software when two or more threads or processes access a shared resource, such as a memory location or a file, in an unexpected or unintended order.
