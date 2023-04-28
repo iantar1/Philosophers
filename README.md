@@ -30,13 +30,13 @@
 
 		A race condition is a situation that can occur in computer software when two or more threads or processes access a shared resource, such as a memory location or a file, in an unexpected or unintended order.
 
-|	SNO|            Process							|				Thread					|
-|------|--------------------------------------------|---------------------------------------|
-|	1  | Process means any program is in execution. | Thread means a segment of a process.	|
-|	2  | The process takes more time to terminate. | The thread takes less time to terminate.	|
-|	3  | It takes more time for creation. | It takes less time for creation.	|
-|	4  | 	It also takes more time for context switching. | It takes less time for context switching.	|
-|	5  | 	The process is less efficient in terms of communication. | Thread is more efficient in terms of communication.	|
-|	6  | Multiprogramming holds the concepts of multi-process. | We don’t need multi programs in action for multiple threads because a single process consists of multiple threads.	|
-|	7  | The process is isolated. | Threads share memory.	|
-|	8  | The process is called the heavyweight process. | A Thread is lightweight as each thread in a process shares code, data, and resources.	|
+|            Process							|				Thread					|
+|--------------------------------------------|---------------------------------------|
+| Process means any program is in execution. | Thread means a segment of a process.	|
+| The process takes more time to terminate. | The thread takes less time to terminate.	|
+| It takes more time for creation. | It takes less time for creation.	|
+| 	It also takes more time for context switching. | It takes less time for context switching.	|
+| 	The process is less efficient in terms of communication. | Thread is more efficient in terms of communication.	|
+| Multiprogramming holds the concepts of multi-process. | We don’t need multi programs in action for multiple threads because a single process consists of multiple threads.	|
+| The process is isolated. | Threads share memory.	|
+| The process is called the heavyweight process. | A Thread is lightweight as each thread in a process shares code, data, and resources.	|
