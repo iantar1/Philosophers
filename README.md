@@ -26,9 +26,6 @@
 	In summary, threads are lighter weight than processes and are used to achieve parallelism within a process, while processes are used to achieve concurrency between independent tasks.
 
 
-* **WHAAT IS RACE CONDITION**:
-
-		A race condition is a situation that can occur in computer software when two or more threads or processes access a shared resource, such as a memory location or a file, in an unexpected or unintended order.
 
 |            Process							|				Thread					|
 |--------------------------------------------|---------------------------------------|
@@ -40,3 +37,8 @@
 | The process takes more time to terminate. | The thread takes less time to terminate.	|
 | The process is called the heavyweight process. | A Thread is lightweight as each thread in a process shares code, data, and resources.	|
 | The process is isolated. | Threads share memory.	|
+
+
+* **WHAAT IS RACE CONDITION**:
+
+		A race condition is a situation that can occur in computer software when two or more threads or processes access a shared resource, such as a memory location or a file, in an unexpected or unintended order.
