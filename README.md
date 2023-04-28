@@ -29,3 +29,7 @@
 * **WHAAT IS RACE CONDITION**:
 
 		A race condition is a situation that can occur in computer software when two or more threads or processes access a shared resource, such as a memory location or a file, in an unexpected or unintended order.
+
+|	SNO|            Process							|				Thread					|
+|	1  | Process means any program is in execution. | Thread means a segment of a process.	|
+|------|--------------------------------------------|---------------------------------------|
