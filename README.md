@@ -10,7 +10,6 @@
 	Each thread has its own program counter, stack, and set of registers, but shares the same memory space as the process and other threads.
 	Threads can communicate and synchronize with each other through shared memory or message passing mechanisms.
 
-![Alt text](https://static.packt-cdn.com/products/9781788627900/graphics/a7c27055-5cd4-4a2a-b934-07078b4c804d.png)
 
 
 * **WHAT IS THE DIFFRENCE BETWEEN THREAD AND PROCESS**:
@@ -27,6 +26,7 @@
 
 		* Communication: Processes can communicate with each other using interprocess communication (IPC) mechanisms such as pipes, sockets, and shared memory. Threads communicate with each other through shared memory or message passing mechanisms.
 
+![Alt text](https://static.packt-cdn.com/products/9781788627900/graphics/a7c27055-5cd4-4a2a-b934-07078b4c804d.png)
 
 
 
