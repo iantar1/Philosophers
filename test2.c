@@ -35,6 +35,7 @@ void	*fun(int *data)
 {
 	int	i;
 	int	t;
+	int	tmp;
 	struct timeval current_time;
 
 	i = 0;
@@ -43,22 +44,35 @@ void	*fun(int *data)
 		pthread_mutex_lock(&mutex[0]);
 		pthread_mutex_lock(&mutex[1]);
 		printf("%dms %d has taken a fork\n", current_time_(t0), *data);
-		die_time[*data - 1] = time_to_die(die_time[*data - 1], current_time_(t0));
+		// printf("I am here:__die_time[%d]:%d\n", *data - 1, die_time[*data - 1]);
+		// printf("before_die_time[0]:%d\n",die_time[0]);
+		// printf("before_die_time[1]:%d\n",die_time[1]);
+		// printf("before_die_time[2]:%d\n",die_time[2]);
+		tmp = die_time[*data - 1];
+		die_time[*data - 1] = time_to_die(tmp, current_time_(t0));
+		// printf("die_time[0]:%d\n",die_time[0]);
+		// printf("die_time[1]:%d\n",die_time[1]);
+		// printf("die_time[2]:%d\n",die_time[2]);
+		if (die_time[*data - 1] > 20)
+		{
+			printf("%dms %d died\n, -->>%d\n", current_time_(t0), *data, die_time[*data - 1]);
+			exit (0);
+		}
 		printf("%dms :%d is eating\n\n", current_time_(t0), *data);
-		sleep(1);
+		usleep(1000);
 		pthread_mutex_unlock(&mutex[0]);
 		pthread_mutex_unlock(&mutex[1]);
 		printf("%dms :%d is sleeping\n\n", current_time_(t0), *data);
-		sleep(1);
+		usleep(1000);
 		printf("%dms :%d is thinking\n\n", current_time_(t0), *data);
-		sleep(1);
+		usleep(1000);
 	}
 	return (NULL);
 }
 
 int	main(void)
 {
-	t_data			*data;3
+	t_data			*data;
 	struct timeval current_time_;
 	int			x = 0;
 	//static	int	die_time[3];
