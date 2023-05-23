@@ -6,7 +6,7 @@
 /*   By: iantar <iantar@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/29 08:33:47 by iantar            #+#    #+#             */
-/*   Updated: 2023/05/19 11:04:22 by iantar           ###   ########.fr       */
+/*   Updated: 2023/05/23 10:08:29 by iantar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,14 @@
 typedef struct	s_data
 {
 	int				ph_num;
-	int				die_time;
+	size_t				die_time;
 	int				eat_time;
 	int				sleep_time;
-	int				t0;
+	size_t				t0;
+	int				micro_t0;
 	int				ph_id;
 	int				*n_times_eat;
-	int				*count_eat_time;
+	size_t			*count_eat_time;
 	pthread_t		*p_th;
 	pthread_mutex_t	*mutex;
 }t_data;
@@ -45,6 +46,11 @@ size_t	ft_strlen(const char *str);
 int		ft_atoi(const char *str);
 int		check_valid_args(int ac, char **av);
 int		check_arg(char *arg);
-void	upgrade_usleep(int tm, int start_t0);
+void	ft_msleep(size_t tm);
+void	ft_usleep(size_t time);
+size_t	micro_current_time_(size_t micro_t0);
+void	ft_bzero(void *str, size_t n);
+int		min_max(int token, int max);
+void	ft_usleep2(int tm);
 
 #endif

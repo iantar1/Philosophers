@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: iantar <iantar@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/29 08:33:39 by iantar            #+#    #+#             */
-/*   Updated: 2023/05/17 09:39:29 by iantar           ###   ########.fr       */
+/*   Created: 2023/05/17 09:42:48 by iantar            #+#    #+#             */
+/*   Updated: 2023/05/21 15:26:39 by iantar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,14 @@ void	*ft_memset(void *buf, int c, size_t len)
 	return (buf);
 }
 
+int	min_max(int token, int max)
+{
+	if (token == max)
+		return (0);
+	else
+		return (token);
+}
+
 int	current_time_(int t0)
 {
 	int	t;
@@ -50,74 +58,81 @@ int	current_time_(int t0)
 	return (t - t0);
 }
 
-int	min_max(int token, int max)
+size_t	micro_current_time_(size_t micro_t0)
 {
-	if (token == max)
-		return (0);
-	else
-		return (token);
+	size_t	t;
+	struct timeval	current_time;
+
+	gettimeofday(&current_time, NULL);
+	t = current_time.tv_sec / 1000000 + current_time.tv_usec;
+	return (t - micro_t0);
 }
 
-int	check_eat_time(int last_time, int current_time)
+void	*routine(t_data *data, int ac)
 {
-	return (current_time - last_time);
-}
-
-void	*routine(t_data *data)
-{
-	//int				i;
 	int				id_;
 
-	//i = 0;
+	(void)ac;
 	pthread_mutex_lock(&data->mutex[data->ph_num]);
 	id_ = data->ph_id;
 	pthread_mutex_unlock(&data->mutex[data->ph_num]);
-	//printf("in_routine_data->ph_id:%p\n", &data->ph_id);
 	while (1)
 	{
-		printf("data->t0:%p\n", &(data->t0));
-		// if (data->count_eat_time[id_] == -1)
-		// {
-		// 	printf("I REACH here\n");
-		// 	pthread_mutex_lock(&data->mutex[data->ph_num + 2]);
-		// }
 		pthread_mutex_lock(&data->mutex[id_ - 1]);
+		pthread_mutex_lock(&data->mutex[data->ph_num + 3]);
 		printf("%dms %d has taken a fork\n", current_time_(data->t0), id_);
+		pthread_mutex_unlock(&data->mutex[data->ph_num + 3]);
 		pthread_mutex_lock(&data->mutex[min_max(id_, data->ph_num)]);
+		pthread_mutex_lock(&data->mutex[data->ph_num + 3]);
 		printf("%dms %d has taken a fork\n", current_time_(data->t0), id_);
+		pthread_mutex_unlock(&data->mutex[data->ph_num + 3]);
+		pthread_mutex_lock(&data->mutex[data->ph_num + 3]);
 		printf("%dms :%d is eating\n\n", current_time_(data->t0), id_);
-		usleep(1000);
+		pthread_mutex_unlock(&data->mutex[data->ph_num + 3]);
+		//ft_msleep(data->eat_time, data->t0);
+		//ft_usleep2(data->eat_time * 1000);
+		ft_usleep(data->eat_time * 1000);
+	
 		pthread_mutex_unlock(&data->mutex[id_ - 1]);
-
-		pthread_mutex_lock(&data->mutex[data->ph_num + 1]);
-		printf("data->count_eat_time[%d]:%d\n", id_, data->count_eat_time[id_]);
-		data->count_eat_time[id_] = current_time_(data->t0);
-		printf("------------>>>>data->count_eat_time[%d]:%d\n", id_, data->count_eat_time[id_]);
-		pthread_mutex_unlock(&data->mutex[data->ph_num + 1]);
-
 		pthread_mutex_unlock(&data->mutex[min_max(id_, data->ph_num)]);
+		//usleep(10);
+		pthread_mutex_lock(&data->mutex[data->ph_num + 1]);
+		//printf("UPUPUPPUPUPUPUPUPUPU\n");
+		data->n_times_eat[id_ - 1] = data->n_times_eat[id_ - 1] + 1;
+		data->count_eat_time[id_ - 1] = current_time_(data->t0);
+		pthread_mutex_unlock(&data->mutex[data->ph_num + 1]);
+		
+		pthread_mutex_lock(&data->mutex[data->ph_num + 3]);
 		printf("%dms :%d is sleeping\n", current_time_(data->t0), id_);
-		usleep(1000);
+		pthread_mutex_unlock(&data->mutex[data->ph_num + 3]);
+		//ft_msleep(data->sleep_time, data->t0);
+		//ft_usleep2(data->sleep_time * 1000);
+		ft_usleep(data->sleep_time * 1000);
+		pthread_mutex_lock(&data->mutex[data->ph_num + 3]);
 		printf("%dms :%d is thinking\n", current_time_(data->t0), id_);
-		usleep(1000);
+		pthread_mutex_unlock(&data->mutex[data->ph_num + 3]);
 	}
 	return (NULL);
 }
 
-int	main(int ac, char *av[])
+int	check_for_n_eat_times(int *n_times, int num_ph, int need_stop)
 {
-	t_data			*data;
-	struct timeval	current_time;
-	int				i;
-	int				status;
+	int	i;
 
-	if (ac < 5 || ac > 6)
-		return (1);
-	//max of int
-	//if (ft_parce())//check if there is unvalid arg, like in push_swap.
-	// return (1);
-	//arg = get_num_from_arg(av, ac);  
-	status = 0;
+	i = 0;
+	while (i < num_ph)
+	{
+		if (n_times[i] < need_stop)
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+t_data	*initialize(char **av)
+{
+	t_data	*data;
+
 	data = malloc(sizeof(t_data));
 	data->ph_num = ft_atoi(av[1]);
 	data->die_time = ft_atoi(av[2]);
@@ -127,51 +142,141 @@ int	main(int ac, char *av[])
 	data->mutex = malloc((data->ph_num) * sizeof(pthread_mutex_t));
 	data->count_eat_time = malloc((data->ph_num) * sizeof(int));
 	ft_bzero(data->count_eat_time, (data->ph_num) * sizeof(int));
-	if (!data->p_th)
+	data->n_times_eat = malloc((data->ph_num) * sizeof(int));
+	ft_bzero(data->n_times_eat, (data->ph_num) * sizeof(int));
+	return (data);
+}
+
+// void	ft_msleep(int tm, int start_t0)
+// {
+// 	int	t0;
+
+// 	t0 = current_time_(start_t0);
+// 	while (current_time_(start_t0) - t0 <= tm)
+// 	;
+// }
+void	ft_usleep(size_t time)
+{
+	struct timeval	current_time;
+	size_t	start;
+	size_t	end;
+
+	gettimeofday(&current_time, NULL);
+	start = current_time.tv_sec / 1000000 + current_time.tv_usec;
+	end = start;
+	while (end - start <= time)
+	{
+		gettimeofday(&current_time, NULL);
+		end = current_time.tv_sec / 1000000 + current_time.tv_usec;
+		//printf("end - start:%lu, time:%lu\n", end - start, time);
+	}
+}
+
+// void	ft_usleep2(int tm)
+// {
+// 	int	i;
+
+// 	i = 0;
+// 	while (i < tm / 10)
+// 	{
+// 		usleep(10);
+// 		i++;
+// 	}
+// }
+
+void	destory_evrything(t_data *data)
+{
+	int	i;
+
+	i = -1;
+	while (++i < data->ph_num + 4)
+		pthread_mutex_destroy(&data->mutex[i]);
+	free(data->p_th);
+	free(data->mutex);
+	free(data->count_eat_time);
+	free(data->n_times_eat);
+	free(data);
+}
+
+int	main(int ac, char *av[])
+{
+	t_data			*data;
+	struct timeval	current_time;
+	int				i;
+	//int		micro_t0;
+
+	if (check_valid_args(ac, av))
 		return (1);
+	data = initialize(av);
 	i = -1;
 	while (++i < data->ph_num + 5)
 	{
 		if (pthread_mutex_init(&data->mutex[i], NULL))
 			return (printf("\n mutex init has failed\n"), 1);
 	}
-	gettimeofday(&current_time, NULL);
-	//pthread_mutex_lock(&data->mutex[data->ph_num]);
-	data->t0 = current_time.tv_sec * 1000 + current_time.tv_usec / 1000;//ms
-	//pthread_mutex_unlock(&data->mutex[data->ph_num + 1]);
 	i = 0;
-	printf("I:%p\n", &i);
-	sleep(1);
+	gettimeofday(&current_time, NULL);
+	data->t0 = current_time.tv_sec * 1000 + current_time.tv_usec / 1000;
+	data->micro_t0 = current_time.tv_sec / 1000000 + current_time.tv_usec;
 	while (i < data->ph_num)
 	{
 		pthread_mutex_lock(&data->mutex[data->ph_num]);
 		data->ph_id = i + 1;
 		pthread_mutex_unlock(&data->mutex[data->ph_num]);
-		printf("data->ph_id:%p\n", &data->ph_id);
 		if (pthread_create(&data->p_th[i], NULL, (void *)&routine, (void *)data))
 			return (printf("Thread can't be created\n"), 1);
-		usleep(100);
+		ft_usleep(100);
+		pthread_mutex_lock(&data->mutex[data->ph_num + 1]);
+		if (current_time_(data->t0) - data->count_eat_time[i] >= data->die_time)
+		{
+			pthread_mutex_lock(&data->mutex[data->ph_num + 3]);
+			return (printf("\e[0;31m""%dms %d died\n",current_time_(data->t0), i + 1), destory_evrything(data), 1);
+		}
+		pthread_mutex_unlock(&data->mutex[data->ph_num + 1]);
+		/////////////
 		i++;
 	}
+	//write(1, "$$$$$$$$$$$\n", 12);
+	// i = 0;
+	// while (i < data->ph_num)
+	// {
+	// 	write(1, "************************\n\n", 26);
+	// 	pthread_join(data->p_th[i], NULL);
+	// 	i++;
+	// }
 	i = 0;
 	while (1)
 	{
+		//ft_msleep(1, data->t0);
+		//ft_usleep(100, data->micro_t0);
+		//ft_usleep2(1000);
+		//ft_usleep(1000);
+		ft_usleep(100);
 		if (i == data->ph_num)
 			i = 0;
 		pthread_mutex_lock(&data->mutex[data->ph_num + 1]);
-		usleep(10000);
-		if (current_time_(data->t0) - data->count_eat_time[i] >= data->die_time)
+		if (ac == 6)
 		{
-			printf("data->count_eat_time[%d]:%d, , ,data->die_time:%d\n",i, data->count_eat_time[i], data->die_time);
-			// pthread_mutex_lock(&data->mutex[data->ph_num + 3]);
-			// ft_memset(data->count_eat_time, -1, (data->ph_num) * sizeof(int));
-			// printf(">>>>>>>>>%d\n", data->count_eat_time[0]);
-			// pthread_mutex_unlock(&data->mutex[data->ph_num + 3]);
-			// usleep(1000);
-			return (printf("\e[0;31m""%dms %d died\n",current_time_(data->t0), data->ph_id), 1);
+			if (check_for_n_eat_times(data->n_times_eat, data->ph_num, ft_atoi(av[5])))
+			{
+				
+				pthread_mutex_lock(&data->mutex[data->ph_num + 3]);
+				return (/*, destory_evrything(data)*/1);
+			}
 		}
-		i++;
+		if (micro_current_time_(data->micro_t0)/1000 - data->count_eat_time[i] >= data->die_time)
+		{
+			pthread_mutex_lock(&data->mutex[data->ph_num + 3]);
+			return (printf("\e[0;31m""%dms %d died\n",current_time_(data->t0), i + 1),/*, destory_evrything(data)*/1);
+		}
+		// if (current_time_(data->t0) - data->count_eat_time[i] >= data->die_time)
+		// {
+		// 	pthread_mutex_lock(&data->mutex[data->ph_num + 3]);
+		// 	return (printf("\e[0;31m""%dms %d died\n",current_time_(data->t0), i + 1),/*, destory_evrything(data)*/1);
+		// }
 		pthread_mutex_unlock(&data->mutex[data->ph_num + 1]);
+		i++;
+		//write(1, "|||||||||||||||||||||||||\n\n", 27);
 	}
 	return (0);	
 }
