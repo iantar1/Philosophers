@@ -4,7 +4,7 @@ SRCS = new_philosophers.c utils_parcing.c parce.c
 
 OBJS = ${SRCS:.c=.o}
 
-CFLAGS = -Wall -Wextra -Werror -fsanitize=thread
+CFLAGS = -Wall -Wextra -Werror #-fsanitize=thread
 
 ${NAME}:${OBJS}
 	cc ${CFLAGS} ${OBJS} -o ${NAME}
