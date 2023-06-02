@@ -56,3 +56,9 @@ In summary, threads are lighter weight than processes and are used to achieve pa
 	Multithreading is used to improve the performance of a program.
 	
 	Multithreading is a common technique used in modern software development to increase performance and responsiveness of applications, especially those that involve I/O operations or long-running tasks that can be split into smaller pieces.
+
+II.bonus part:
+
+	* **WHAAT IS SEMAPHORE**:
+
+		A semaphore is an integer variable, shared among multiple processes. The main aim of using a semaphore is process synchronization and access control for a common resource in a concurrent environment. 
