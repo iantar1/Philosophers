@@ -6,7 +6,7 @@
 /*   By: iantar <iantar@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 10:12:02 by iantar            #+#    #+#             */
-/*   Updated: 2023/06/02 10:54:53 by iantar           ###   ########.fr       */
+/*   Updated: 2023/06/05 10:29:58 by iantar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,16 +79,17 @@ int	ft_atoi(const char *str)
 	return ((int)(n * num));
 }
 
-void	destory_evrything(t_data *data)
-{
-	int	i;
 
-	i = -1;
-	while (++i < data->ph_num + 4)
-		pthread_mutex_destroy(&data->mutex[i]);
-	free(data->p_th);
-	free(data->mutex);
-	free(data->count_eat_time);
-	free(data->n_times_eat);
-	free(data);
-}
+// void	destory_evrything(t_data *data)
+// {
+// 	int	i;
+
+// 	i = -1;
+// 	while (++i < data->ph_num + 4)
+// 		pthread_mutex_destroy(&data->mutex[i]);
+// 	free(data->p_th);
+// 	free(data->mutex);
+// 	free(data->count_eat_time);
+// 	free(data->n_times_eat);
+// 	free(data);
+// }

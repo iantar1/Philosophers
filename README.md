@@ -61,4 +61,6 @@ II.bonus part:
 
 	* **WHAAT IS SEMAPHORE**:
 
-		A semaphore is an integer variable, shared among multiple processes. The main aim of using a semaphore is process synchronization and access control for a common resource in a concurrent environment. 
+		A semaphore is an integer variable, shared among multiple processes. The main aim of using a semaphore is process synchronization and access control for a common resource in a concurrent environment.
+
+		The initial value of a semaphore depends on the problem at hand. Usually, we use the number of resources available as the initial value.

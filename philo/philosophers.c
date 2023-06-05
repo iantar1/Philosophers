@@ -6,7 +6,7 @@
 /*   By: iantar <iantar@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 12:53:00 by iantar            #+#    #+#             */
-/*   Updated: 2023/06/02 10:52:55 by iantar           ###   ########.fr       */
+/*   Updated: 2023/06/03 13:33:18 by iantar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,9 +63,8 @@ int	check_for_n_eat_times(int *n_times, int num_ph, int need_stop)
 	return (1);
 }
 
-void	forks_eating(t_data *data, int id_, int ac)//int ac should not be here
+void	forks_eating(t_data *data, int id_)//int ac should not be here
 {
-	(void)ac;
 	pthread_mutex_lock(&data->mutex[id_ - 1]);//take fork1
 	pthread_mutex_lock(&data->mutex[data->ph_num + 3]);
 	printf("%zums %d has taken a fork\n", current_time_(data), id_);
@@ -88,7 +87,7 @@ void	forks_eating(t_data *data, int id_, int ac)//int ac should not be here
 	pthread_mutex_unlock(&data->mutex[id_ % data->ph_num]);//release fork2
 }
 
-void	*routine(t_data *data, int ac)
+void	*routine(t_data *data)
 {
 	int				id_;
 
@@ -99,7 +98,7 @@ void	*routine(t_data *data, int ac)
 	{
 		// if (id_ % 2)
 		// 	usleep(50);
-		forks_eating(data, id_, ac);
+		forks_eating(data, id_);
 		pthread_mutex_lock(&data->mutex[data->ph_num + 3]);
 		printf("%zu ms %d is sleeping\n", current_time_(data), id_);
 		pthread_mutex_unlock(&data->mutex[data->ph_num + 3]);
@@ -182,7 +181,8 @@ int	create_thread(t_data *data, int i)
 	if (current_time_(data) - data->count_eat_time[i] >= data->die_time)
 	{
 		pthread_mutex_lock(&data->mutex[data->ph_num + 3]);
-		return (printf("\e[0;31m""%zums %d died\n",current_time_(data), i + 1), 1);
+		return (printf("\e[0;31m""%zums %d died\n",
+				current_time_(data), i + 1), 1);
 	}
 	pthread_mutex_unlock(&data->mutex[data->ph_num + 1]);
 	return (0);
@@ -191,8 +191,8 @@ int	create_thread(t_data *data, int i)
 
 int	main(int ac, char *av[])
 {
-	t_data			*data;
-	int				i; 
+	t_data	*data;
+	int		i;
 
 	if (check_valid_args(ac, av))
 		return (1);
@@ -212,5 +212,5 @@ int	main(int ac, char *av[])
 	}
 	if (check_death(data, ac, av))
 		return (1);
-	return (0);	
+	return (0);
 }
