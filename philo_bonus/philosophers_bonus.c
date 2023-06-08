@@ -6,7 +6,7 @@
 /*   By: iantar <iantar@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/02 10:56:18 by iantar            #+#    #+#             */
-/*   Updated: 2023/06/07 19:51:17 by iantar           ###   ########.fr       */
+/*   Updated: 2023/06/08 18:18:05 by iantar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,16 +61,16 @@ size_t	current_time_(t_data *data)
 void	forks_eating(t_data *data, int index)
 {
 	sem_wait(data->sem);
-	sem_wait(data->bin_sem);//////
+	//sem_wait(data->bin_sem);//////
 	printf("%zums %d has taken first fork\n", current_time_(data), index);
-	sem_post(data->bin_sem);/////
+	//sem_post(data->bin_sem);/////
 	sem_wait(data->sem);
-	sem_wait(data->bin_sem);
+	//sem_wait(data->bin_sem);
 	printf("%zums %d has taken second fork\n", current_time_(data), index);
-	sem_post(data->bin_sem);
-	sem_wait(data->bin_sem);
+	//sem_post(data->bin_sem);
+	//sem_wait(data->bin_sem);
 	printf("%zums %d is eating\n\n", current_time_(data), index);
-	sem_post(data->bin_sem);
+	//sem_post(data->bin_sem);
 	ft_msleep(data->eat_time);
 	gettimeofday(&(data->current_time_die), NULL);
 	sem_post(data->sem);
@@ -100,8 +100,13 @@ void	kill_childes(pid_t *pid, int ph_num)
 	i = 0;
 	while (i < ph_num)
 	{
-		kill(pid[i], SIGKILL);
+		if (pid[i])
+		{
+			printf("pid[%d]:%d\n", i, pid[i]);
+			kill(pid[i], SIGKILL);
+		}
 		i++;
+		
 	}
 }
 
@@ -116,10 +121,10 @@ void	eat_check(t_data *data)
 		last_eat = data->current_time_die.tv_sec * 1000 + data->current_time_die.tv_usec / 1000;
 		gettimeofday(&current_time, NULL);
 		now = current_time.tv_sec * 1000 + current_time.tv_usec / 1000;
-		printf("last_eat:%zu, now:%zu\n", last_eat, now);
-		
+		//printf("last_eat:%zu, now:%zu\n", last_eat, now);
 		 if (now - last_eat > data->die_time)//data race
 		 {
+			printf("||\n");
 			exit(1);
 			//kill_childes(data->pid, data->ph_num, data->ph_id);
 		 }
@@ -133,21 +138,22 @@ void	routine(t_data *data, int index)
 
 	i = 0;
 	data->last_eat = 0;
-	data->ph_id = index;
-	usleep(1000000);
-	//data->t0 = current_time_(data);
+	//data->ph_id = index;
+	usleep(100000);
+	data->t0 = current_time_(data);
 	if (pthread_create(&th, NULL, (void *)&eat_check, data))
-		exit(2);
-	while (1)
+	// 	exit(2);
+	while (i < 10)
 	{
 		forks_eating(data, index);
-		sem_wait(data->bin_sem);
+		//sem_wait(data->bin_sem);
 		printf("%zu ms %d is sleeping\n", current_time_(data), index);
-		sem_post(data->bin_sem);
+		//sem_post(data->bin_sem);
 		ft_msleep(data->sleep_time);
-		sem_wait(data->bin_sem);
+		//sem_wait(data->bin_sem);
 		printf("%zu ms %d is thinking\n", current_time_(data), index);
-		sem_post(data->bin_sem);
+		//sem_post(data->bin_sem);
+		//i++;
 	}
 }
 
@@ -170,7 +176,7 @@ t_data	*initialize(char **av)
 
 	data = malloc(sizeof(t_data));
 	gettimeofday(&current_time, NULL);
-	data->t0 = data->current_time_die.tv_sec * 1000 + data->current_time_die.tv_usec / 1000;
+	data->t0 = current_time.tv_sec * 1000 + current_time.tv_usec / 1000;
 	data->ph_num = ft_atoi(av[1]);
 	data->die_time = ft_atoi(av[2]);
 	data->eat_time = ft_atoi(av[3]);
@@ -180,6 +186,8 @@ t_data	*initialize(char **av)
 	ft_bzero(data->count_eat_time, (data->ph_num) * sizeof(size_t));
 	data->n_times_eat = malloc((data->ph_num) * sizeof(int));
 	ft_bzero(data->n_times_eat, (data->ph_num) * sizeof(int));
+	ft_bzero(data->pid, (data->ph_num) * sizeof(int));
+	//data->current_time_die = malloc(sizeof(struct timeval));
 	return (data);
 }
 
@@ -196,14 +204,15 @@ size_t	check_death(t_data *data)
 	{
 		if (i == data->ph_num)
 			i = 0;
-		waitpid(data->pid[i], &status, 0);
-		printf("status:%d\n", status);
+		waitpid(-1, &status, 0);
+		//printf("\e[0;31m""%zums %d died\n",current_time_(data), i + 1);
 		if (status)
 		{
+			printf("status:%d\n", status);
 			//time_die = current_time_(data);
-			sem_wait(data->bin_sem);
+			////sem_wait(data->bin_sem);
 			kill_childes(data->pid, data->ph_num);
-			(printf("\e[0;31m""%zums %d died\n",current_time_(data), i + 1), exit(1));
+			(printf("\e[0;31m""%zums %d died\n",current_time_(data), i + 1), exit(25));
 			//return (i + 1);
 		}
 	}
@@ -221,6 +230,7 @@ size_t	check_death(t_data *data)
 // 	}
 // 	return (0);
 // }
+
 
 //The wait operation decrements the value of the semaphore
 //the signal (post) operation increments the value of the semaphore.
@@ -246,12 +256,18 @@ int	main(int ac, char *av[])
 	while (i < data->ph_num)
 	{
 		data->pid[i] = fork();
+		data->ph_id = i + 1;
 		if (!data->pid[i])
 			routine(data, i + 1);
+		printf("i:%d\n", i);
+			//check_death(data);
+		//printf(BLU"data->pid:%d\n"reset, data->pid[i]);
 		i++;
 	}
 	printf("$$$$$$$$$$$$$$$$$$$$$$$$$$\n");
+	//exit(1);
 	check_death(data);
+	//printf("I AM THE PARENT\n");
 	// if (ph_die)
 	// 	(printf("\e[0;31m""%zums %d died\n",current_time_(data), ph_die), exit(1));
 	//sem_close(sem_);
