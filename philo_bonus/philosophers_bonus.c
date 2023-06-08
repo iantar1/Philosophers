@@ -6,7 +6,7 @@
 /*   By: iantar <iantar@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/02 10:56:18 by iantar            #+#    #+#             */
-/*   Updated: 2023/06/08 18:27:27 by iantar           ###   ########.fr       */
+/*   Updated: 2023/06/08 20:14:48 by iantar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,7 @@ void	eat_check(t_data *data)
 		
 		 if (now - last_eat > data->die_time)//data race
 		 {
+			printf("\e[0;31m""%zums %d died\n",current_time_(data), data->ph_id);
 			exit(1);
 			//kill_childes(data->pid, data->ph_num, data->ph_id);
 		 }
@@ -170,7 +171,7 @@ t_data	*initialize(char **av)
 
 	data = malloc(sizeof(t_data));
 	gettimeofday(&current_time, NULL);
-	data->t0 = data->current_time_die.tv_sec * 1000 + data->current_time_die.tv_usec / 1000;
+	//data->t0 = data->current_time.tv_sec * 1000 + data->current_time.tv_usec / 1000;
 	data->ph_num = ft_atoi(av[1]);
 	data->die_time = ft_atoi(av[2]);
 	data->eat_time = ft_atoi(av[3]);
@@ -186,16 +187,12 @@ t_data	*initialize(char **av)
 
 size_t	check_death(t_data *data)
 {
-	int	i;
 	int	status;
 	//size_t	time_die;
 
-	i = 0;
 	status = 0;
 	while (1)
 	{
-		if (i == data->ph_num)
-			i = 0;
 		waitpid(-1, &status, 0);
 		printf("status:%d\n", status);
 		printf("kjk\n");
@@ -204,7 +201,8 @@ size_t	check_death(t_data *data)
 			//time_die = current_time_(data);
 			sem_wait(data->bin_sem);
 			kill_childes(data->pid, data->ph_num);
-			(printf("\e[0;31m""%zums %d died\n",current_time_(data), i + 1), exit(1));
+			exit(1);
+			//(printf("\e[0;31m""%zums %d died\n",current_time_(data), WEXITSTATUS(status)), exit(1));
 			//return (i + 1);
 		}
 	}
@@ -234,6 +232,8 @@ int	main(int ac, char *av[])
 	//int		ph_die;
 
 	i = 0;
+	
+	
 	if (check_valid_args(ac, av))
 		return (1);
 	data = initialize(av);
@@ -243,6 +243,7 @@ int	main(int ac, char *av[])
 	data->bin_sem = sem_open("_bin_sem_", O_CREAT | O_EXCL, 0777, 1);
 	if (data->sem == SEM_FAILED || data->bin_sem == SEM_FAILED)
 		return (printf("sem_open failed\n"), 1);
+	//data->t0 = 
 	//pid = malloc(data->ph_num * sizeof(pid_t));
 	while (i < data->ph_num)
 	{
@@ -250,12 +251,16 @@ int	main(int ac, char *av[])
 		if (!data->pid[i])
 			routine(data, i + 1);
 		else
+		{
 			i++;
+		}
+		//check_death(data);
 	}
 	printf("$$$$$$$$$$$$$$$$$$$$$$$$$$\n");
 	check_death(data);
 	// if (ph_die)
 	// 	(printf("\e[0;31m""%zums %d died\n",current_time_(data), ph_die), exit(1));
+	exit(1);
 	//sem_close(sem_);
 	return (0);
 }
