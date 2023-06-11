@@ -6,7 +6,7 @@
 /*   By: iantar <iantar@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/29 08:33:47 by iantar            #+#    #+#             */
-/*   Updated: 2023/06/11 13:10:42 by iantar           ###   ########.fr       */
+/*   Updated: 2023/06/11 14:26:05 by iantar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,20 +25,18 @@
 
 typedef struct	s_data
 {
+	size_t	last_eat;
+	size_t	t0;
+	int		die_time;
 	int		ph_num;
-	long	die_time;
 	int		eat_time;
 	int		sleep_time;
 	int		ac;
-	size_t	t0;
-	//int		micro_t0;
 	int		ph_id;
 	int		n_times_eat;
-	//size_t	*count_eat_time;
 	pid_t	*pid;
 	sem_t	*sem;
 	sem_t	*bin_sem;
-	size_t	last_eat;
 	struct timeval	current_time_die;
 	pthread_mutex_t	mutex[2];
 }t_data;
