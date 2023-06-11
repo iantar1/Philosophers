@@ -6,7 +6,7 @@
 /*   By: iantar <iantar@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/29 08:33:47 by iantar            #+#    #+#             */
-/*   Updated: 2023/06/03 13:31:40 by iantar           ###   ########.fr       */
+/*   Updated: 2023/06/11 17:48:46 by iantar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <pthread.h>
 # include <unistd.h>
 # include <sys/time.h>
+# include <stdarg.h>
 
 typedef struct	s_data
 {
@@ -52,5 +53,9 @@ size_t	micro_current_time_(size_t micro_t0);
 void	ft_bzero(void *str, size_t n);
 int		min_max(int token, int max);
 void	ft_usleep2(int tm);
+int		ft_printf(const char *str, ...);
+int		ft_putchar(char c);
+int		ft_putstr(char *str);
+void	ft_putnbr(long nbr);
 
 #endif

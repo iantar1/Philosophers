@@ -1,6 +1,6 @@
 NAME = philo
 
-SRCS = philosophers.c utils_parcing.c parce.c
+SRCS = philosophers.c utils_parcing.c parce.c utils2.c ft_printf.c
 
 OBJS = ${SRCS:.c=.o}
 
