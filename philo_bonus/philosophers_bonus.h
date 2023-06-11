@@ -6,7 +6,7 @@
 /*   By: iantar <iantar@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/29 08:33:47 by iantar            #+#    #+#             */
-/*   Updated: 2023/06/11 15:12:48 by iantar           ###   ########.fr       */
+/*   Updated: 2023/06/11 16:09:58 by iantar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@
 
 typedef struct	s_data
 {
-	size_t	last_eat;
 	size_t	t0;
 	int		die_time;
 	int		ph_num;
@@ -39,7 +38,6 @@ typedef struct	s_data
 	sem_t	*sem;
 	sem_t	*bin_sem;
 	struct timeval	current_time_die;
-	pthread_mutex_t	mutex[2];
 }t_data;
 
 

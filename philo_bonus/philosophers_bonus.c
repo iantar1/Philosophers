@@ -6,7 +6,7 @@
 /*   By: iantar <iantar@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/02 10:56:18 by iantar            #+#    #+#             */
-/*   Updated: 2023/06/11 15:35:14 by iantar           ###   ########.fr       */
+/*   Updated: 2023/06/11 17:09:18 by iantar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	ft_msleep(size_t time)
 	end = start;
 	while (end - start < time)
 	{
-		usleep(30);
+		usleep(98);
 		gettimeofday(&current_time, NULL);
 		end = current_time.tv_sec * 1000 + current_time.tv_usec / 1000;
 	}
@@ -114,18 +114,6 @@ void	routine(t_data *data, int index)
 	}
 }
 
-// void	print_data(size_t *data, int num_ph)
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	while (i < num_ph)
-// 	{
-// 		ft_printf("data[%d]:%zu\n", i, data[i]);
-// 		i++;
-// 	}
-// }
-
 t_data	*initialize(char **av, int ac)
 {
 	t_data	*data;
@@ -183,7 +171,7 @@ int	main(int ac, char *av[])
 		data->pid[i] = fork();
 		if (!data->pid[i])
 			routine(data, i + 1);
-		usleep(50);
+		usleep(30);
 		i++;
 	}
 	check_death(data);
