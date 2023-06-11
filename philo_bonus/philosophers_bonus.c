@@ -6,7 +6,7 @@
 /*   By: iantar <iantar@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/02 10:56:18 by iantar            #+#    #+#             */
-/*   Updated: 2023/06/08 20:14:48 by iantar           ###   ########.fr       */
+/*   Updated: 2023/06/11 11:43:07 by iantar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,16 +33,9 @@ void	ft_msleep(size_t time)
 size_t	current_time_(t_data *data)
 {
 	size_t	t;
-	static int	one_time;
+
 	struct timeval	current_time;
 	size_t	to_rtn;
-
-	if (!one_time)
-	{
-		gettimeofday(&current_time, NULL);
-		data->t0 = current_time.tv_sec * 1000 + current_time.tv_usec / 1000;
-		one_time++;
-	}
 	gettimeofday(&current_time, NULL);
 	t = current_time.tv_sec * 1000 + current_time.tv_usec / 1000;
 	to_rtn = t - data->t0;
@@ -107,19 +100,16 @@ void	kill_childes(pid_t *pid, int ph_num)
 
 void	eat_check(t_data *data)
 {
-	//(void)data;
 	struct timeval	current_time;
-	long	last_eat;
-	long	now;
+
 	while (1)
 	{
-		last_eat = data->current_time_die.tv_sec * 1000 + data->current_time_die.tv_usec / 1000;
 		gettimeofday(&current_time, NULL);
-		now = current_time.tv_sec * 1000 + current_time.tv_usec / 1000;
-		//printf("last_eat:%zu, now:%zu\n", last_eat, now);
-		
-		 if (now - last_eat > data->die_time)//data race
+		 if ((current_time.tv_sec * 1000 + current_time.tv_usec / 1000)
+		 	- (data->current_time_die.tv_sec * 1000 + data->current_time_die.tv_usec / 1000)
+			> data->die_time)//data race
 		 {
+			sem_wait(data->bin_sem);
 			printf("\e[0;31m""%zums %d died\n",current_time_(data), data->ph_id);
 			exit(1);
 			//kill_childes(data->pid, data->ph_num, data->ph_id);
@@ -129,14 +119,8 @@ void	eat_check(t_data *data)
 
 void	routine(t_data *data, int index)
 {
-	int			i;
 	pthread_t	th;
 
-	i = 0;
-	data->last_eat = 0;
-	data->ph_id = index;
-	usleep(1000000);
-	//data->t0 = current_time_(data);
 	if (pthread_create(&th, NULL, (void *)&eat_check, data))
 		exit(2);
 	while (1)
@@ -167,11 +151,8 @@ void	routine(t_data *data, int index)
 t_data	*initialize(char **av)
 {
 	t_data	*data;
-	struct timeval	current_time;
 
 	data = malloc(sizeof(t_data));
-	gettimeofday(&current_time, NULL);
-	//data->t0 = data->current_time.tv_sec * 1000 + data->current_time.tv_usec / 1000;
 	data->ph_num = ft_atoi(av[1]);
 	data->die_time = ft_atoi(av[2]);
 	data->eat_time = ft_atoi(av[3]);
@@ -185,28 +166,17 @@ t_data	*initialize(char **av)
 }
 
 
-size_t	check_death(t_data *data)
+void	check_death(t_data *data)
 {
 	int	status;
-	//size_t	time_die;
 
 	status = 0;
-	while (1)
+	waitpid(-1, &status, 0);
+	if (status)
 	{
-		waitpid(-1, &status, 0);
-		printf("status:%d\n", status);
-		printf("kjk\n");
-		if (status)
-		{
-			//time_die = current_time_(data);
-			sem_wait(data->bin_sem);
-			kill_childes(data->pid, data->ph_num);
-			exit(1);
-			//(printf("\e[0;31m""%zums %d died\n",current_time_(data), WEXITSTATUS(status)), exit(1));
-			//return (i + 1);
-		}
+		kill_childes(data->pid, data->ph_num);
+		exit(1);
 	}
-	return (0);
 }
 
 // int	create_process(t_data *data, int i)
@@ -225,15 +195,14 @@ size_t	check_death(t_data *data)
 //the signal (post) operation increments the value of the semaphore.
 int	main(int ac, char *av[])
 {
-	//pid_t	*pid;
-	//size_t	die_time;
 	t_data	*data;
 	int		i;
-	//int		ph_die;
+	int	status;
+	struct timeval	current_time;
+	
 
 	i = 0;
-	
-	
+	status = 0;
 	if (check_valid_args(ac, av))
 		return (1);
 	data = initialize(av);
@@ -243,24 +212,20 @@ int	main(int ac, char *av[])
 	data->bin_sem = sem_open("_bin_sem_", O_CREAT | O_EXCL, 0777, 1);
 	if (data->sem == SEM_FAILED || data->bin_sem == SEM_FAILED)
 		return (printf("sem_open failed\n"), 1);
-	//data->t0 = 
-	//pid = malloc(data->ph_num * sizeof(pid_t));
+	gettimeofday(&current_time, NULL);
+	gettimeofday(&(data->current_time_die), NULL);
+	data->t0 = current_time.tv_sec * 1000 + current_time.tv_usec / 1000;
+	//printf("befor:_t)%zu\n", data->t0);
 	while (i < data->ph_num)
 	{
+		data->ph_id = i + 1;
 		data->pid[i] = fork();
 		if (!data->pid[i])
 			routine(data, i + 1);
-		else
-		{
-			i++;
-		}
-		//check_death(data);
+		i++;
 	}
-	printf("$$$$$$$$$$$$$$$$$$$$$$$$$$\n");
+	//printf("$$$$$$$$$$$$$$$$$$$$$$$$$$\n");
 	check_death(data);
-	// if (ph_die)
-	// 	(printf("\e[0;31m""%zums %d died\n",current_time_(data), ph_die), exit(1));
 	exit(1);
-	//sem_close(sem_);
 	return (0);
 }
