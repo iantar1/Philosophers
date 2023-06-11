@@ -6,7 +6,7 @@
 /*   By: iantar <iantar@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/02 10:56:18 by iantar            #+#    #+#             */
-/*   Updated: 2023/06/11 14:27:26 by iantar           ###   ########.fr       */
+/*   Updated: 2023/06/11 15:35:14 by iantar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,13 @@ void	ft_msleep(size_t time)
 	end = start;
 	while (end - start < time)
 	{
-		usleep(50);
+		usleep(30);
 		gettimeofday(&current_time, NULL);
 		end = current_time.tv_sec * 1000 + current_time.tv_usec / 1000;
 	}
 }
 
-size_t	current_time_(t_data *data)
+int	current_time_(t_data *data)
 {
 	size_t			t;
 	struct timeval	current_time;
@@ -43,14 +43,14 @@ void	forks_eating(t_data *data, int index)
 {
 	sem_wait(data->sem);
 	sem_wait(data->bin_sem);
-	printf("%zums %d has taken first fork\n", current_time_(data), index);
+	ft_printf("%dms %d has taken first fork\n", current_time_(data), index);
 	sem_post(data->bin_sem);
 	sem_wait(data->sem);
 	sem_wait(data->bin_sem);
-	printf("%zums %d has taken second fork\n", current_time_(data), index);
+	ft_printf("%dms %d has taken second fork\n", current_time_(data), index);
 	sem_post(data->bin_sem);
 	sem_wait(data->bin_sem);
-	printf("%zums %d is eating\n", current_time_(data), index);
+	ft_printf("%dms %d is eating\n", current_time_(data), index);
 	sem_post(data->bin_sem);
 	ft_msleep(data->eat_time);
 	gettimeofday(&(data->current_time_die), NULL);
@@ -88,7 +88,7 @@ void	eat_check(t_data *data)
 			> data->die_time)//data race
 		{
 			sem_wait(data->bin_sem);
-			printf("\e[0;31m""%zums %d died\n",current_time_(data), data->ph_id);
+			ft_printf("\e[0;31m""%dms %d died\n",current_time_(data), data->ph_id);
 			exit(1);
 		}
 	}
@@ -105,11 +105,11 @@ void	routine(t_data *data, int index)
 	{
 		forks_eating(data, index);
 		sem_wait(data->bin_sem);
-		printf("%zums %d is sleeping\n", current_time_(data), index);
+		ft_printf("%dms %d is sleeping\n", current_time_(data), index);
 		sem_post(data->bin_sem);
 		ft_msleep(data->sleep_time);
 		sem_wait(data->bin_sem);
-		printf("%zums %d is thinking\n", current_time_(data), index);
+		ft_printf("%dms %d is thinking\n", current_time_(data), index);
 		sem_post(data->bin_sem);
 	}
 }
@@ -121,7 +121,7 @@ void	routine(t_data *data, int index)
 // 	i = 0;
 // 	while (i < num_ph)
 // 	{
-// 		printf("data[%d]:%zu\n", i, data[i]);
+// 		ft_printf("data[%d]:%zu\n", i, data[i]);
 // 		i++;
 // 	}
 // }
@@ -174,7 +174,7 @@ int	main(int ac, char *av[])
 	data->sem = sem_open("s_e_m", O_CREAT | O_EXCL, 0777, data->ph_num);
 	data->bin_sem = sem_open("_bin_sem_", O_CREAT | O_EXCL, 0777, 1);
 	if (data->sem == SEM_FAILED || data->bin_sem == SEM_FAILED)
-		return (printf("sem_open failed\n"), 1);
+		return (ft_printf("sem_open failed\n"), 1);
 	gettimeofday(&current_time, NULL);
 	gettimeofday(&(data->current_time_die), NULL);
 	data->t0 = current_time.tv_sec * 1000 + current_time.tv_usec / 1000;
@@ -183,6 +183,7 @@ int	main(int ac, char *av[])
 		data->pid[i] = fork();
 		if (!data->pid[i])
 			routine(data, i + 1);
+		usleep(50);
 		i++;
 	}
 	check_death(data);

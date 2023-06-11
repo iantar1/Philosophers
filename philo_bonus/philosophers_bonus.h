@@ -6,7 +6,7 @@
 /*   By: iantar <iantar@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/29 08:33:47 by iantar            #+#    #+#             */
-/*   Updated: 2023/06/11 14:26:05 by iantar           ###   ########.fr       */
+/*   Updated: 2023/06/11 15:12:48 by iantar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <sys/time.h>
 # include <semaphore.h>
 # include <signal.h>
+# include <stdarg.h>
 # define BLU "\e[0;34m"
 # define reset "\e[0m"
 
@@ -61,5 +62,9 @@ int		min_max(int token, int max);
 void	ft_usleep2(int tm);
 char	*ft_itoa(int n);
 char	*ft_strjoin(char const *s1, char const *s2);
+int		ft_printf(const char *str, ...);
+void	ft_putnbr(long nbr);
+int		ft_putstr(char *str);
+int		ft_putchar(char c);
 
 #endif
