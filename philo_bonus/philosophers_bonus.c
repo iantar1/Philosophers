@@ -6,7 +6,7 @@
 /*   By: iantar <iantar@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/02 10:56:18 by iantar            #+#    #+#             */
-/*   Updated: 2023/06/11 11:43:07 by iantar           ###   ########.fr       */
+/*   Updated: 2023/06/11 13:21:32 by iantar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,12 @@ void	forks_eating(t_data *data, int index)
 	gettimeofday(&(data->current_time_die), NULL);
 	sem_post(data->sem);
 	sem_post(data->sem);
+	if (data->ac > 5)
+	{
+		(data->n_times_eat)--;
+		if (!data->n_times_eat)
+			exit(0);
+	}
 }
 
 // void	kill_childes(pid_t *pid, int ph_num, int ph_id)
@@ -148,7 +154,7 @@ void	routine(t_data *data, int index)
 // 	}
 // }
 
-t_data	*initialize(char **av)
+t_data	*initialize(char **av, int ac)
 {
 	t_data	*data;
 
@@ -158,10 +164,11 @@ t_data	*initialize(char **av)
 	data->eat_time = ft_atoi(av[3]);
 	data->sleep_time = ft_atoi(av[4]);
 	data->pid = malloc((data->ph_num) * sizeof(pid_t));
-	data->count_eat_time = malloc((data->ph_num) * sizeof(size_t));
-	ft_bzero(data->count_eat_time, (data->ph_num) * sizeof(size_t));
-	data->n_times_eat = malloc((data->ph_num) * sizeof(int));
-	ft_bzero(data->n_times_eat, (data->ph_num) * sizeof(int));
+	//data->count_eat_time = malloc((data->ph_num) * sizeof(size_t));
+	//ft_bzero(data->count_eat_time, (data->ph_num) * sizeof(size_t));
+	if (ac > 5)
+		data->n_times_eat = ft_atoi(av[5]);
+	//ft_bzero(data->n_times_eat, (data->ph_num) * sizeof(int));
 	return (data);
 }
 
@@ -172,11 +179,14 @@ void	check_death(t_data *data)
 
 	status = 0;
 	waitpid(-1, &status, 0);
-	if (status)
+	if (WEXITSTATUS(status))
 	{
 		kill_childes(data->pid, data->ph_num);
 		exit(1);
 	}
+	while (--(data->ph_num))
+		waitpid(-1, &status, 0);
+	exit(0);
 }
 
 // int	create_process(t_data *data, int i)
@@ -205,7 +215,7 @@ int	main(int ac, char *av[])
 	status = 0;
 	if (check_valid_args(ac, av))
 		return (1);
-	data = initialize(av);
+	data = initialize(av, ac);
 	sem_unlink("s_e_m");
 	sem_unlink("_bin_sem_");
 	data->sem = sem_open("s_e_m", O_CREAT | O_EXCL, 0777, data->ph_num);
@@ -226,6 +236,5 @@ int	main(int ac, char *av[])
 	}
 	//printf("$$$$$$$$$$$$$$$$$$$$$$$$$$\n");
 	check_death(data);
-	exit(1);
 	return (0);
 }
