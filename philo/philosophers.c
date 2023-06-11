@@ -6,7 +6,7 @@
 /*   By: iantar <iantar@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 12:53:00 by iantar            #+#    #+#             */
-/*   Updated: 2023/06/11 17:54:43 by iantar           ###   ########.fr       */
+/*   Updated: 2023/06/11 21:50:24 by iantar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	ft_msleep(size_t time)
 	end = start;
 	while (end - start < time)
 	{
-		usleep(50);
+		usleep(100);
 		gettimeofday(&current_time, NULL);
 		end = current_time.tv_sec * 1000 + current_time.tv_usec / 1000;
 	}
@@ -136,7 +136,7 @@ int	check_death(t_data *data, int ac, char **av)
 					ft_atoi(av[5])))
 				return (pthread_mutex_lock(&data->mutex[data->ph_num + 3]), 1);
 		}
-		if (current_time_(data) - data->count_eat_time[i] >= data->die_time)
+		if (current_time_(data) - data->count_eat_time[i] > data->die_time)
 		{
 			pthread_mutex_lock(&data->mutex[data->ph_num + 3]);
 			return (ft_printf("\e[0;31m""%dms %d died\n", current_time_(data),
