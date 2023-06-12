@@ -6,7 +6,7 @@
 /*   By: iantar <iantar@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/02 10:56:18 by iantar            #+#    #+#             */
-/*   Updated: 2023/06/11 22:00:31 by iantar           ###   ########.fr       */
+/*   Updated: 2023/06/12 15:15:26 by iantar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ void	eat_check(t_data *data)
 			> data->die_time)//data race
 		{
 			sem_wait(data->bin_sem);
-			ft_printf("\e[0;31m""%dms %d died\n",current_time_(data), data->ph_id);
+			ft_printf("\e[0;31m""%dms %d died\n", current_time_(data), data->ph_id);
 			(ft_free(data), exit(1));
 		}
 	}
@@ -106,6 +106,8 @@ void	routine(t_data *data, int index)
 
 	data->ph_id = index;
 	if (pthread_create(&th, NULL, (void *)&eat_check, data))
+		exit(2);
+	if (pthread_detach(th))
 		exit(2);
 	while (1)
 	{

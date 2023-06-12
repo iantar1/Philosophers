@@ -6,7 +6,7 @@
 /*   By: iantar <iantar@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 12:53:00 by iantar            #+#    #+#             */
-/*   Updated: 2023/06/12 14:37:24 by iantar           ###   ########.fr       */
+/*   Updated: 2023/06/12 15:14:26 by iantar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,16 +166,18 @@ int	create_thread(t_data *data, int i)
 	return (0);
 }
 
-void	detach(pthread_t *p_th, int ph_num)
+int	detach(pthread_t *p_th, int ph_num)
 {
 	int	i;
 
 	i = 0;
 	while (i < ph_num)
 	{
-		pthread_detach(p_th[i]);
+		if (pthread_detach(p_th[i]))
+			return (-1);
 		i++;
 	}
+	return (0);
 }
 
 int	main(int ac, char *av[])
@@ -199,8 +201,10 @@ int	main(int ac, char *av[])
 			return (1);
 		i++;
 	}
-	detach(data->p_th, data->ph_num);
+	if (detach(data->p_th, data->ph_num))
+		return (1);
 	if (check_death(data, ac, av))
 		return (1);
 	return (0);
 }
+
