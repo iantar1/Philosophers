@@ -6,7 +6,7 @@
 /*   By: iantar <iantar@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/11 15:01:59 by iantar            #+#    #+#             */
-/*   Updated: 2023/06/11 17:47:05 by iantar           ###   ########.fr       */
+/*   Updated: 2023/06/12 21:48:13 by iantar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,4 +43,13 @@ void	ft_putnbr(long nbr)
 	}
 	ft_putchar(nbr % 10 + '0');
 	return ;
+}
+
+void	ft_free(t_data *data)
+{
+	free(data->p_th);
+	free(data->mutex);
+	free(data->count_eat_time);
+	free(data->n_times_eat);
+	free(data);
 }

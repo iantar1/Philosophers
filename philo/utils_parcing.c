@@ -6,11 +6,11 @@
 /*   By: iantar <iantar@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 10:12:02 by iantar            #+#    #+#             */
-/*   Updated: 2023/05/21 16:57:42 by iantar           ###   ########.fr       */
+/*   Updated: 2023/06/12 21:46:14 by iantar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "philosophers.h"
+#include "philosophers.h"
 
 void	ft_bzero(void *str, size_t n)
 {
@@ -28,7 +28,6 @@ int	min_max(int token, int max)
 	else
 		return (token);
 }
-
 
 void	*ft_memset(void *buf, int c, size_t len)
 {
@@ -77,18 +76,4 @@ int	ft_atoi(const char *str)
 			return (0);
 	}
 	return ((int)(n * num));
-}
-
-void	destory_evrything(t_data *data)
-{
-	int	i;
-
-	i = -1;
-	while (++i < data->ph_num + 4)
-		pthread_mutex_destroy(&data->mutex[i]);
-	free(data->p_th);
-	free(data->mutex);
-	free(data->count_eat_time);
-	free(data->n_times_eat);
-	free(data);
 }
