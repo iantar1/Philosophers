@@ -6,13 +6,12 @@
 /*   By: iantar <iantar@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/29 08:33:47 by iantar            #+#    #+#             */
-/*   Updated: 2023/06/11 17:48:46 by iantar           ###   ########.fr       */
+/*   Updated: 2023/06/12 13:05:39 by iantar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILOSOPHERS_H
 # define PHILOSOPHERS_H
-
 # include <stdio.h>
 # include <stdlib.h>
 # include <pthread.h>

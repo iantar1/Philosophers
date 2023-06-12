@@ -6,11 +6,17 @@
 /*   By: iantar <iantar@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/02 10:56:18 by iantar            #+#    #+#             */
-/*   Updated: 2023/06/11 18:44:41 by iantar           ###   ########.fr       */
+/*   Updated: 2023/06/11 22:00:31 by iantar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers_bonus.h"
+
+void	ft_free(t_data *data)
+{
+	free(data->pid);
+	free(data);
+}
 
 void	ft_msleep(size_t time)
 {
@@ -60,7 +66,7 @@ void	forks_eating(t_data *data, int index)
 	{
 		(data->n_times_eat)--;
 		if (!data->n_times_eat)
-			exit(0);
+			(ft_free(data), exit(0));
 	}
 }
 
@@ -89,7 +95,7 @@ void	eat_check(t_data *data)
 		{
 			sem_wait(data->bin_sem);
 			ft_printf("\e[0;31m""%dms %d died\n",current_time_(data), data->ph_id);
-			exit(1);
+			(ft_free(data), exit(1));
 		}
 	}
 }
@@ -133,16 +139,16 @@ void	check_death(t_data *data)
 {
 	int	status;
 
-	status = 0;
+	//status = 0;
 	waitpid(-1, &status, 0);
 	if (WEXITSTATUS(status))
 	{
 		kill_childes(data->pid, data->ph_num);
-		exit(1);
+		(ft_free(data), exit(1));
 	}
 	while (--(data->ph_num))
 		waitpid(-1, &status, 0);
-	exit(0);
+	(ft_free(data), exit(0));
 }
 
 //The wait operation decrements the value of the semaphore

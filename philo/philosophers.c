@@ -6,7 +6,7 @@
 /*   By: iantar <iantar@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 12:53:00 by iantar            #+#    #+#             */
-/*   Updated: 2023/06/11 21:50:24 by iantar           ###   ########.fr       */
+/*   Updated: 2023/06/12 14:37:24 by iantar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void	forks_eating(t_data *data, int id_)
 	ft_printf("%dms %d has taken a fork\n", current_time_(data), id_);
 	pthread_mutex_unlock(&data->mutex[data->ph_num + 3]);
 	pthread_mutex_lock(&data->mutex[data->ph_num + 3]);
-	ft_printf("%dms %d is eating\n\n", current_time_(data), id_);
+	ft_printf("%dms %d is eating\n", current_time_(data), id_);
 	pthread_mutex_unlock(&data->mutex[data->ph_num + 3]);
 	ft_msleep(data->eat_time);
 	pthread_mutex_lock(&data->mutex[data->ph_num + 1]);
@@ -93,11 +93,11 @@ void	*routine(t_data *data)
 	{
 		forks_eating(data, id_);
 		pthread_mutex_lock(&data->mutex[data->ph_num + 3]);
-		ft_printf("%d ms %d is sleeping\n", current_time_(data), id_);
+		ft_printf("%dms %d is sleeping\n", current_time_(data), id_);
 		pthread_mutex_unlock(&data->mutex[data->ph_num + 3]);
 		ft_msleep(data->sleep_time);
 		pthread_mutex_lock(&data->mutex[data->ph_num + 3]);
-		ft_printf("%d ms %d is thinking\n", current_time_(data), id_);
+		ft_printf("%dms %d is thinking\n", current_time_(data), id_);
 		pthread_mutex_unlock(&data->mutex[data->ph_num + 3]);
 	}
 }
@@ -166,6 +166,18 @@ int	create_thread(t_data *data, int i)
 	return (0);
 }
 
+void	detach(pthread_t *p_th, int ph_num)
+{
+	int	i;
+
+	i = 0;
+	while (i < ph_num)
+	{
+		pthread_detach(p_th[i]);
+		i++;
+	}
+}
+
 int	main(int ac, char *av[])
 {
 	t_data	*data;
@@ -187,6 +199,7 @@ int	main(int ac, char *av[])
 			return (1);
 		i++;
 	}
+	detach(data->p_th, data->ph_num);
 	if (check_death(data, ac, av))
 		return (1);
 	return (0);

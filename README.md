@@ -64,3 +64,14 @@ II.bonus part:
 		A semaphore is an integer variable, shared among multiple processes. The main aim of using a semaphore is process synchronization and access control for a common resource in a concurrent environment.
 
 		The initial value of a semaphore depends on the problem at hand. Usually, we use the number of resources available as the initial value.
+
+
+
+what is thread:
+	->
+what is deadlock:
+what is the deffrent between thread and processe
+what is semaphore
+what is defrent between semaphore and mutex
+what is atomic operation
+what is race condition
