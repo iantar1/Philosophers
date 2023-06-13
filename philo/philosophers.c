@@ -6,7 +6,7 @@
 /*   By: iantar <iantar@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 12:53:00 by iantar            #+#    #+#             */
-/*   Updated: 2023/06/12 21:57:02 by iantar           ###   ########.fr       */
+/*   Updated: 2023/06/13 11:11:29 by iantar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,9 @@ int	check_death(t_data *data, int ac, char **av)
 	i = 0;
 	while (1)
 	{
+		pthread_mutex_lock(&data->mutex[data->ph_num + 1]);
 		if (i == data->ph_num)
 			i = 0;
-		pthread_mutex_lock(&data->mutex[data->ph_num + 1]);
 		if (ac == 6)
 		{
 			if (check_for_n_eat_times(data->n_times_eat, data->ph_num,
@@ -52,7 +52,8 @@ int	check_death(t_data *data, int ac, char **av)
 			return (ft_printf("%dms %d died\n", current_time_(data),
 					i + 1), 1);
 		}
-		(pthread_mutex_unlock(&data->mutex[data->ph_num + 1]), i++);
+		i++;
+		pthread_mutex_unlock(&data->mutex[data->ph_num + 1]);
 	}
 	return (0);
 }
@@ -69,7 +70,7 @@ int	create_thread(t_data *data, int i)
 	if (current_time_(data) - data->count_eat_time[i] >= data->die_time)
 	{
 		pthread_mutex_lock(&data->mutex[data->ph_num + 3]);
-		return (ft_printf("%dms %d died\n",
+		return (ft_printf("%d %d died\n",
 				current_time_(data), i + 1), 1);
 	}
 	pthread_mutex_unlock(&data->mutex[data->ph_num + 1]);
@@ -114,6 +115,6 @@ int	main(int ac, char *av[])
 	if (detach(data->p_th, data->ph_num))
 		return (ft_free(data), 1);
 	if (check_death(data, ac, av))
-		return (ft_free(data), 1);
+		return (1);
 	return (ft_free(data), 0);
 }

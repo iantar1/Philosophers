@@ -6,7 +6,7 @@
 /*   By: iantar <iantar@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/11 15:01:59 by iantar            #+#    #+#             */
-/*   Updated: 2023/06/12 21:48:13 by iantar           ###   ########.fr       */
+/*   Updated: 2023/06/13 10:56:07 by iantar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,12 @@ void	ft_putnbr(long nbr)
 
 void	ft_free(t_data *data)
 {
+	int	i;
+
+	i = 0;
+	usleep(100);
+	while (i < data->ph_num + 5 && !pthread_mutex_destroy(&data->mutex[i]))
+		i++;
 	free(data->p_th);
 	free(data->mutex);
 	free(data->count_eat_time);

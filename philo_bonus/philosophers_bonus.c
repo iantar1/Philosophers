@@ -6,7 +6,7 @@
 /*   By: iantar <iantar@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/02 10:56:18 by iantar            #+#    #+#             */
-/*   Updated: 2023/06/12 21:57:21 by iantar           ###   ########.fr       */
+/*   Updated: 2023/06/13 10:42:15 by iantar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,9 +83,6 @@ void	check_death(t_data *data)
 		waitpid(-1, &status, 0);
 	(ft_free(data), exit(0));
 }
-
-//The wait operation decrements the value of the semaphore
-//the signal (post) operation increments the value of the semaphore.
 
 int	main(int ac, char *av[])
 {

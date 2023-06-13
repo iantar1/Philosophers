@@ -1,4 +1,0 @@
-[philo-Test #2]: Given 4 410 200 200 arguments to philo, no philosopher should die !
-[philo_bonus-Test #2]: Given 4 410 200 200 arguments to philo_bonus, no philosopher should die !
-[philo_bonus-Test #6]: Given 10 410 200 200 arguments to philo_bonus, 10 processes should be forked, each process for a philosopher !
-[philo-Test #2]: Given 4 410 200 200 arguments to philo, no philosopher should die !

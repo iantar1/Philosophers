@@ -4,7 +4,7 @@ SRCS = philosophers_bonus.c utils_parcing_bonus.c parce_bonus.c ft_itoa.c ft_pri
 
 OBJS = ${SRCS:.c=.o}
 
-CFLAGS = -Wall -Wextra -Werror  #-fsanitize=thread -g3 #-fsanitize=address
+CFLAGS = -Wall -Wextra -Werror
 
 ${NAME}:${OBJS}
 	cc ${CFLAGS} ${OBJS} -o ${NAME}

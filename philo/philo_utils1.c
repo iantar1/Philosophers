@@ -6,7 +6,7 @@
 /*   By: iantar <iantar@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 21:42:34 by iantar            #+#    #+#             */
-/*   Updated: 2023/06/12 21:43:27 by iantar           ###   ########.fr       */
+/*   Updated: 2023/06/13 09:38:06 by iantar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ int	current_time_(t_data *data)
 	static int		one_time;
 	struct timeval	current_time;
 
+	pthread_mutex_lock(&data->mutex[data->ph_num + 4]);
 	if (!one_time)
 	{
 		gettimeofday(&current_time, NULL);
@@ -43,6 +44,7 @@ int	current_time_(t_data *data)
 	}
 	gettimeofday(&current_time, NULL);
 	t = current_time.tv_sec * 1000 + current_time.tv_usec / 1000;
+	pthread_mutex_unlock(&data->mutex[data->ph_num + 4]);
 	return (t - data->t0);
 }
 
