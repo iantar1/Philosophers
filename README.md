@@ -65,14 +65,3 @@ II.bonus part:
 
 		The initial value of a semaphore depends on the problem at hand. Usually, we use the number of resources available as the initial value.
 
-
-
-✅what is thread:
-	->
-✅what is deadlock:
-	:when two or more thread are unable to proceed because each is waiting for the other to release a resource or take some other action.
-✅what is the deffrent between thread and processe
-what is semaphore
-what is defrent between semaphore and mutex
-what is atomic operation
-what is race condition
