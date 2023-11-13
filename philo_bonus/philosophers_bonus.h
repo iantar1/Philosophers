@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosophers_bonus.h                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iantar <iantar@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: iantar <iantar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/29 08:33:47 by iantar            #+#    #+#             */
-/*   Updated: 2023/06/12 21:51:20 by iantar           ###   ########.fr       */
+/*   Updated: 2023/11/13 21:22:53 by iantar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@
 # include <semaphore.h>
 # include <signal.h>
 # include <stdarg.h>
+# include <sys/wait.h>
+# include <fcntl.h>
 
 typedef struct s_data
 {
