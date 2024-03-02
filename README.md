@@ -43,6 +43,7 @@
 
  
 In summary, threads are lighter weight than processes and are used to achieve parallelism within a process, while processes are used to achieve concurrency between independent tasks.
+( A thread is a context of execution, while a process is a bunch of resources associated with a computation)
 
 * **WHAAT IS RACE CONDITION**:
 
